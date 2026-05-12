@@ -13,8 +13,70 @@
 #
 ---
 include:
-  - board: planck@6.0.0//zmk
-  - board: corneish_zen_left@2.0.0//zmk
-  - board: corneish_zen_right@2.0.0//zmk
-  - board: glove80_lh
-  - board: glove80_rh
+  # SOFLE -----------------------------------
+  # ## Firmwares (Dongle + Split)
+  # - board: xiao_ble//zmk
+  #   shield: Sofle_dongle_central prospector_adapter
+  #   cmake-args: -DCONFIG_PROSPECTOR_STATUS_SCREEN_OPERATOR=y
+  #   artifact-name: dongle_theme_operator
+
+  # - board: nice_nano//zmk
+  #   shield: Sofle_dongle_left
+  #   artifact-name: dongle_split_left
+
+  # - board: nice_nano//zmk
+  #   shield: Sofle_dongle_right
+  #   artifact-name: dongle_split_right
+
+  # ### BLACKLIGHTRELAY -------------------
+  - board: xiao_ble//zmk
+    shield: Sofle_dongle_central prospector_adapter
+    keymap: SOFLE_BlacklightRelay_dongle
+    extra-conf: SOFLE_BlacklightRelay_dongle
+    cmake-args: -DCONFIG_PROSPECTOR_STATUS_SCREEN_OPERATOR=y
+    artifact-name: blacklightrelay_dongle_theme_operator
+
+  - board: nice_nano//zmk
+    shield: Sofle_dongle_left
+    keymap: SOFLE_BlacklightRelay_dongle
+    extra-conf: SOFLE_BlacklightRelay_dongle
+    artifact-name: blacklightrelay_split_left
+
+  - board: nice_nano//zmk
+    shield: Sofle_dongle_right
+    keymap: SOFLE_BlacklightRelay_dongle
+    extra-conf: SOFLE_BlacklightRelay_dongle
+    artifact-name: blacklightrelay_split_right
+
+  # CORNE -----------------------------------
+  # ## Firmwares (Dongle + Split)
+  # - board: xiao_ble//zmk
+  #   shield: Corne_dongle_central prospector_adapter
+  #   cmake-args: -DCONFIG_PROSPECTOR_STATUS_SCREEN_OPERATOR=y
+  #   artifact-name: corne_dongle_theme_operator
+  # - board: nice_nano//zmk
+  #   shield: Corne_dongle_left
+  #   artifact-name: corne_split_left
+  # - board: nice_nano//zmk
+  #   shield: Corne_dongle_right
+  #   artifact-name: corne_split_right
+  - board: nice_nano//zmk
+    shield: Corne_L
+    keymap: CORNE_AkitsuEcho
+    extra-conf: CORNE_AkitsuEcho
+    artifact-name: akitsuecho_split_left
+
+  - board: nice_nano//zmk
+    shield: Corne_R
+    keymap: CORNE_AkitsuEcho
+    extra-conf: CORNE_AkitsuEcho
+    artifact-name: akitsuecho_split_right
+
+  # Resets
+  - board: nice_nano//zmk
+    shield: settings_reset
+    artifact-name: reset_splits
+
+  - board: xiao_ble//zmk
+    shield: settings_reset
+    artifact-name: reset_dongle

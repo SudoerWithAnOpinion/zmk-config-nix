@@ -11,12 +11,12 @@ build_matrix := "build.yaml"
 # parse build.yaml and filter targets by expression
 _parse_targets $expr: _check_yq_version
     #!/usr/bin/env bash
-    attrs="[.board, .shield, .snippet, .\"artifact-name\", .\"cmake-args\"]"
+    attrs="[.board, .shield, .snippet, .keymap, .\"extra-conf\", .\"artifact-name\", .\"cmake-args\"]"
     filter="(($attrs | map(. // [.]) | combinations), ((.include // {})[] | $attrs)) | join(\",\")"
     echo "$(yq -r "$filter" {{build_matrix}} | grep -v "^," | grep -i "${expr/#all/.*}")"
 
 # build firmware for single board & shield combination
-_build_single $board $shield $snippet $artifact cmake_args *west_args:
+_build_single $board $shield $snippet $keymap $extra_conf $artifact cmake_args *west_args:
     #!/usr/bin/env bash
     set -euo pipefail
     artifact="${artifact:-${shield:+${shield// /+}-}${board//\//_}}"
@@ -24,7 +24,7 @@ _build_single $board $shield $snippet $artifact cmake_args *west_args:
 
     echo "Building firmware for $artifact..."
     west build -s zmk/app -d "$build_dir" -b $board {{ west_args }} ${snippet:+-S "$snippet"} -- \
-        -DZMK_CONFIG="{{ config }}" ${shield:+-DSHIELD="$shield"} {{ cmake_args }}
+        -DZMK_CONFIG="{{ config }}" ${shield:+-DSHIELD="$shield"} ${keymap:+-DKEYMAP_FILE="{{ config }}/$keymap.keymap"} ${extra_conf:+-DEXTRA_CONF_FILE="{{ config }}/$extra_conf.conf"} {{ cmake_args }}
 
     if [[ -f "$build_dir/zephyr/zmk.uf2" ]]; then
         mkdir -p "{{ out }}" && cp "$build_dir/zephyr/zmk.uf2" "{{ out }}/$artifact.uf2"
@@ -39,8 +39,8 @@ build expr *west_args:
     targets=$(just build_matrix={{build_matrix}} _parse_targets {{ expr }})
 
     [[ -z $targets ]] && echo "No matching targets found. Aborting..." >&2 && exit 1
-    echo "$targets" | while IFS=, read -r board shield snippet artifact cmake_args; do
-        just _build_single "$board" "$shield" "$snippet" "$artifact" "$cmake_args" {{ west_args }}
+    echo "$targets" | while IFS=, read -r board shield snippet keymap extra_conf artifact cmake_args; do
+        just _build_single "$board" "$shield" "$snippet" "$keymap" "$extra_conf" "$artifact" "$cmake_args" {{ west_args }}
     done
 
 # clear build cache and artifacts
