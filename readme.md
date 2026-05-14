@@ -114,8 +114,36 @@ for many shells.)
 #### Drawing the keymap
 
 The build environment packages
-[keymap-drawer](https://github.com/caksoylar/keymap-drawer). `just draw` parses
-`base.keymap` and draws it to `draw/base.svg`.
+[keymap-drawer](https://github.com/caksoylar/keymap-drawer). `just draw` draws
+`config/CORNE_AkitsuEcho.keymap` by default, and you can pass another keymap
+name such as `just draw CORNE_AkitsuEcho` to render that file instead.
+
+By default, it uses the shield layout DTSI at
+`config/boards/shields/Corne_dongle/Corne_dongle-layouts.dtsi` (`layout_0`).
+To target another shield/layout explicitly, pass both:
+`just draw <keymap> <shield> <layout_name>`.
+
+The main output is written to `draw/<keymap>.svg` and the overview variant to
+`draw/<keymap>_overview.svg`.
+
+Use `--png` to also export `draw/<keymap>/<keymap>.png`:
+
+```sh
+just draw AkitsuEcho --png
+```
+
+Use `--separate-layers` to emit one file per layer under
+`draw/<keymap>/layers/`:
+
+```sh
+just draw AkitsuEcho --separate-layers
+```
+
+You can combine both switches:
+
+```sh
+just draw AkitsuEcho --separate-layers --png
+```
 
 #### Devicetree formatter (experimental)
 

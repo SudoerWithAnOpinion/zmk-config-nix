@@ -14,9 +14,13 @@
     # Devicetree linter; use my fork for nix-package and ZMK-specific tweaks.
     dts-linter.url = "github:urob/dts-linter/zmk";
     dts-linter.inputs.nixpkgs.follows = "nixpkgs";
+
+    # OpenSCAD keycap generator.
+    keyv2.url = "github:rsheldiii/KeyV2";
+    keyv2.flake = false;
   };
 
-  outputs = { nixpkgs, zephyr-nix, dts-linter, ... }: let
+  outputs = { nixpkgs, zephyr-nix, dts-linter, keyv2, ... }: let
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
@@ -47,6 +51,9 @@
 
               keymap_drawer
               dts-format
+              pkgs.librsvg
+              pkgs.inkscape
+              pkgs.fontconfig
 
               # -- Used by just_recipes and west_commands. Most systems already have them. --
               pkgs.gawk
@@ -65,6 +72,21 @@
           shellHook = ''
             export ZMK_BUILD_DIR=$(pwd)/.build;
             export ZMK_SRC_DIR=$(pwd)/zmk/app;
+            export KEYV2_DIR="${keyv2}";
+            # OPENSCADPATH lets OpenSCAD find KeyV2's includes.scad without a hardcoded path.
+            # Launch OpenSCAD from inside this shell: `openscad path/to/file.scad`
+            # or via just: `just scad path/to/file.scad`
+            export OPENSCADPATH="${keyv2}";
+
+            export ZMK_FONTS_DIR=$(pwd)/assets/fonts
+            export FONTCONFIG_FILE=$(pwd)/.fontconfig-zmk.xml
+            cat > "$FONTCONFIG_FILE" <<EOF
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <dir>$ZMK_FONTS_DIR</dir>
+</fontconfig>
+EOF
           '';
         };
       }
