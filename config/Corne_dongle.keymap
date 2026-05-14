@@ -16,43 +16,75 @@
 #define ADJUST 3
 
 ZMK_MOD_MORPH(nav_left_home,
-        bindings = <&kp LEFT>, <&kp HOME>;
-        mods = <(MOD_LSFT|MOD_RSFT)>;
+    bindings = <&kp LEFT>, <&kp HOME>;
+    mods = <(MOD_LSFT|MOD_RSFT)>;
 )
 
 ZMK_MOD_MORPH(nav_up_pgup,
-        bindings = <&kp UP>, <&kp PG_UP>;
-        mods = <(MOD_LSFT|MOD_RSFT)>;
+    bindings = <&kp UP>, <&kp PG_UP>;
+    mods = <(MOD_LSFT|MOD_RSFT)>;
 )
 
 ZMK_MOD_MORPH(nav_down_pgdn,
-        bindings = <&kp DOWN>, <&kp PG_DN>;
-        mods = <(MOD_LSFT|MOD_RSFT)>;
+    bindings = <&kp DOWN>, <&kp PG_DN>;
+    mods = <(MOD_LSFT|MOD_RSFT)>;
 )
 
 ZMK_MOD_MORPH(nav_right_end,
-        bindings = <&kp RIGHT>, <&kp END>;
-        mods = <(MOD_LSFT|MOD_RSFT)>;
+    bindings = <&kp RIGHT>, <&kp END>;
+    mods = <(MOD_LSFT|MOD_RSFT)>;
 )
 
 ZMK_MOD_MORPH(bksp_del_mod,
-        bindings = <&kp BSPC>, <&kp DEL>;
-        mods = <(MOD_LCTL|MOD_RCTL|MOD_LSFT|MOD_RSFT|MOD_LALT|MOD_RALT|MOD_LGUI|MOD_RGUI)>;
+    bindings = <&kp BSPC>, <&kp DEL>;
+    mods = <(MOD_LCTL|MOD_RCTL|MOD_LSFT|MOD_RSFT|MOD_LALT|MOD_RALT|MOD_LGUI|MOD_RGUI)>;
 )
 
 ZMK_TAP_DANCE(td_lshift_capsw,
-        tapping-term-ms = <200>;
-        bindings = <&kp LSHFT>, <&caps_word>;
+    tapping-term-ms = <200>;
+    bindings = <&kp LSHFT>, <&caps_word>;
 )
+
+#define ZMK_BT_SEL_DISC_SHIFT(_name, _slot) \
+ZMK_MOD_MORPH(_name, \
+    bindings = <&bt BT_SEL _slot>, <&bt BT_DISC _slot>; \
+    mods = <(MOD_LSFT|MOD_RSFT)>; \
+)
+
+ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_0, 0)
+ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_1, 1)
+ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_2, 2)
+ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_3, 3)
+ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_4, 4)
 
 / {
         // Activate ADJUST layer by pressing raise and lower
         conditional_layers {
-                compatible = "zmk,conditional-layers";
-                adjust_layer {
-                        if-layers = <LOWER RAISE>;
-                        then-layer = <ADJUST>;
-                };
+            compatible = "zmk,conditional-layers";
+            adjust_layer {
+                if-layers = <LOWER RAISE>;
+                then-layer = <ADJUST>;
+            };
+        };
+        behaviors: {
+            uc_mode_win: uc_mode_win {
+                compatible = "zmk,behavior-mod-morph";
+                #binding-cells = <0>;
+                bindings = <&uc UC_SET_WIN_COMPOSE>, <&uc UC_SET_WIN_ALT>;
+                mods = <(MOD_LSFT|MOD_RSFT)>;
+            };
+            uc_mode_mac: uc_mode_mac {
+                compatible = "zmk,behavior-mod-morph";
+                #binding-cells = <0>;
+                bindings = <&uc UC_SET_MACOS>, <&uc UC_SET_EMACS>;
+                mods = <(MOD_LSFT|MOD_RSFT)>;
+            };
+            uc_mode_linux: uc_mode_linux {
+                compatible = "zmk,behavior-mod-morph";
+                #binding-cells = <0>;
+                bindings = <&uc UC_SET_LINUX>, <&uc UC_SET_LINUX_ALT>;
+                mods = <(MOD_LSFT|MOD_RSFT)>;
+            };
         };
         keymap {
                 compatible = "zmk,keymap";
@@ -114,7 +146,7 @@ ZMK_TAP_DANCE(td_lshift_capsw,
 // ├───────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼───────┤
 // │ CTRL  │     │     │     │     │     │   │     │  ←  │  ↑  │  ↓  │  →  │  F12  │
 // ├───────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼───────┤
-// │ SHFT  │     │     │     │     │     │   │     │     │     │     │     │       │
+// │ SHFT  │     │     │     │     │     │   │     │     │     │     │     │ SHIFT │
 // ╰───────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴───────╯
 //                     │ GUI │     │ SPC │   │ ENT │     │ ALT │
 //                     ╰─────┴─────┴─────╯   ╰─────┴─────┴─────╯
@@ -124,7 +156,7 @@ ZMK_TAP_DANCE(td_lshift_capsw,
 //     ├─────────────────┼───────┼───────┼───────┼──────────┼───────┤                    ├───────┼───────────────┼───────────────┼───────────────┼───────────────┼──────────────┤
         &kp LCTRL         &none   &none   &none   &none       &none                       &none   &nav_left_home  &nav_up_pgup    &nav_down_pgdn  &nav_right_end  &kp F12
 //     ├─────────────────┼───────┼───────┼───────┼──────────┼───────┤                    ├───────┼───────────────┼───────────────┼───────────────┼───────────────┼──────────────┤
-        &td_lshift_capsw  &none   &none   &none   &none       &none                       &none   &none           &none           &none           &none           &none 
+        &td_lshift_capsw  &none   &none   &none   &none       &none                       &none   &none           &none           &none           &none           &kp RSHFT 
 //     ╰─────────────────┴───────┴───────┴───────┼──────────┼───────┼──────────╮ ╭───────┼───────┼───────────────┼───────────────┴───────────────┴───────────────┴──────────────╯
                                                   &kp LGUI   &trans  &kp SPACE    &kp RET &trans  &kp RALT
 //                                               ╰──────────┴───────┴──────────╯ ╰───────┴───────┴───────────────╯
@@ -144,15 +176,15 @@ ZMK_TAP_DANCE(td_lshift_capsw,
 //                     │     │     │     │   │     │     │     │
 //                     ╰─────┴─────┴─────╯   ╰─────┴─────┴─────╯
                         bindings = <
-//     ╭──────────────┬──────────────┬─────────────┬──────────────┬──────────────┬──────────────╮                  ╭───────┬──────┬──────┬──────┬──────┬──────╮
-        &bt BT_CLR     &bt BT_SEL 0   &bt BT_SEL 1  &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4                      &none   &none  &none  &none  &none  &none
-//     ├──────────────┼──────────────┼─────────────┼──────────────┼──────────────┼──────────────┤                  ├───────┼──────┼──────┼──────┼──────┼──────┤
-        &out OUT_TOG   &none          &none         &none          &none          &none                             &none   &none  &none  &none  &none  &none
-//     ├──────────────┼──────────────┼─────────────┼──────────────┼──────────────┼──────────────┤                  ├───────┼──────┼──────┼──────┼──────┼──────┤
-        &none          &none          &none         &none          &none          &none                             &none   &none  &none  &none  &none  &none
-//     ╰──────────────┴──────────────┴─────────────┴──────────────┼──────────────┼──────────────┼───────╮  ╭───────┼───────┼──────┼──────┴──────┴──────┴──────╯
-                                                                   &none          &none          &none      &none   &none   &none
-//                                                                ╰──────────────┴──────────────┴───────╯  ╰───────┴───────┴──────╯
+//     ╭──────────────┬───────────────┬──────────────┬───────────────┬───────────────┬───────────────╮                  ╭───────┬──────┬──────┬──────┬──────┬──────╮
+        &bt BT_CLR     &bt_sel_disc_0  &bt_sel_disc_1 &bt_sel_disc_2  &bt_sel_disc_3  &bt_sel_disc_4                     &none   &none  &none  &none  &none  &none
+//     ├──────────────┼───────────────┼──────────────┼───────────────┼───────────────┼───────────────┤                  ├───────┼──────┼──────┼──────┼──────┼──────┤
+        &out OUT_TOG   &none           &none          &none           &none           &none                             &none   &none  &none  &none  &none  &none
+//     ├──────────────┼───────────────┼──────────────┼───────────────┼───────────────┼───────────────┤                  ├───────┼──────┼──────┼──────┼──────┼──────┤
+        &none          &none           &none          &none           &none           &none                             &none   &none  &none  &none  &none  &none
+//     ╰──────────────┴───────────────┴──────────────┴───────────────┼───────────────┼───────────────┼───────╮  ╭───────┼───────┼──────┼──────┴──────┴──────┴──────╯
+                                                                      &none           &none           &none      &none   &none   &none
+//                                                                   ╰───────────────┴───────────────┴───────╯  ╰───────┴───────┴──────╯
                         >;
                         display-name = "SHADOW";
                 };
