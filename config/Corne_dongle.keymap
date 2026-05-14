@@ -9,11 +9,52 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 #include "zmk-helpers/helper.h"
+#include <dt-bindings/zmk-unicode/uc.h>
 
-#define BASE 0
-#define LOWER 1
-#define RAISE 2
-#define ADJUST 3
+#define BASE       0
+#define LOWER      1
+#define RAISE      2
+#define ADJUST     3
+#define ACCENT_SEL 4
+#define ACUTE      5
+#define GRAVE      6
+#define CIRCUMFLEX 7
+#define DIAERESIS  8
+#define SPECIAL    9
+#define OGONEK     10
+#define DOT_MARKS  11
+#define COMMA_BELOW 12
+#define DBL_ACUTE  13
+#define CARON_BREVE 14
+#define RING       15
+#define MACRON     16
+
+#define UC_I_OGONEK       0x12f   0x12e   // i/ I ogonek
+#define UC_U_OGONEK       0x173   0x172   // u/ U ogonek
+#define UC_A_DOT_BELOW    0x1ea1  0x1ea0  // a dot below
+#define UC_E_DOT_BELOW    0x1eb9  0x1eb8  // e dot below
+#define UC_I_DOT_BELOW    0x1ecb  0x1eca  // i dot below
+#define UC_O_DOT_BELOW    0x1ecd  0x1ecc  // o dot below
+#define UC_U_DOT_BELOW    0x1ee5  0x1ee4  // u dot below
+#define UC_C_DOT_ABOVE    0x10b   0x10a   // c dot above
+#define UC_S_DOT_ABOVE    0x1e61  0x1e60  // s dot above
+#define UC_O_DOUBLE_ACUTE 0x151   0x150   // o double acute
+#define UC_U_DOUBLE_ACUTE 0x171   0x170   // u double acute
+#define UC_E_BREVE        0x115   0x114   // e breve
+#define UC_G_BREVE        0x11f   0x11e   // g breve
+#define UC_A_RING         0x00e5  0x00c5  // a ring
+#define UC_A_MACRON       0x0101  0x0100  // a macron
+#define UC_E_MACRON       0x0113  0x0112  // e macron
+#define UC_I_MACRON       0x012b  0x012a  // i macron
+#define UC_O_MACRON       0x014d  0x014c  // o macron
+#define UC_U_MACRON       0x016b  0x016a  // u macron
+#define UC_INV_QMARK      0x00bf  0x00bf  // inverted question
+#define UC_INV_EXCL       0x00a1  0x00a1  // inverted exclamation
+#define UC_L_GUILLEMET    0x00ab  0x00ab  // left guillemet
+#define UC_R_GUILLEMET    0x00bb  0x00bb  // right guillemet
+#define UC_LOW_DBL_QUOTE  0x201e  0x201e  // low double quote
+#define UC_L_DBL_QUOTE    0x201c  0x201c  // left double quote
+#define UC_R_DBL_QUOTE    0x201d  0x201d  // right double quote
 
 ZMK_MOD_MORPH(nav_left_home,
     bindings = <&kp LEFT>, <&kp HOME>;
@@ -58,6 +99,24 @@ ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_3, 3)
 ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_4, 4)
 
 / {
+        combos {
+            compatible = "zmk,combos";
+            // J+K → accent selector layer (right hand)
+            combo_accent_sel_jk {
+                timeout-ms = <50>;
+                key-positions = <19 20>;
+                bindings = <&sl ACCENT_SEL>;
+                layers = <BASE>;
+            };
+            // D+F → accent selector layer (left hand)
+            combo_accent_sel_df {
+                timeout-ms = <50>;
+                key-positions = <15 16>;
+                bindings = <&sl ACCENT_SEL>;
+                layers = <BASE>;
+            };
+        };
+
         // Activate ADJUST layer by pressing raise and lower
         conditional_layers {
             compatible = "zmk,conditional-layers";
@@ -187,6 +246,217 @@ ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_4, 4)
 //                                                                   ╰───────────────┴───────────────┴───────╯  ╰───────┴───────┴──────╯
                         >;
                         display-name = "SHADOW";
+                };
+
+// ─── Accent selector ─────────────────────────────────────────────────────
+                // Activated by combo J+K or D+F. Press accent-type key, then target letter.
+                // Router keys: ` grave, ' acute, ; diaeresis, T circumflex, , special,
+                // Q ogonek, W dot marks, E double acute, R caron/breve, O macron, P ring, / comma-below.
+                accent_sel_layer {
+                        bindings = <
+//     ╭──────────┬────────────┬──────────────┬───────────────┬───────────────┬────────────────╮                 ╭──────────────┬──────┬────────────┬──────────────┬──────────┬─────────╮
+        &sl GRAVE  &sl OGONEK   &sl DOT_MARKS  &sl DBL_ACUTE   &sl CARON_BREVE &sl CIRCUMFLEX                     &none          &none  &none       &sl MACRON     &sl RING   &none
+//     ├──────────┼────────────┼──────────────┼───────────────┼───────────────┼────────────────┤                 ├──────────────┼──────┼────────────┼──────────────┼──────────┼─────────┤
+        &none      &none        &none          &none           &none           &none                              &none          &none  &none       &none          &sl DIAERESIS  &sl ACUTE
+//     ├──────────┼────────────┼──────────────┼───────────────┼───────────────┼────────────────┤                 ├──────────────┼──────┼────────────┼──────────────┼──────────┼─────────┤
+        &none      &none        &none          &none           &none           &none                              &none          &none  &sl SPECIAL &none          &sl COMMA_BELOW &none
+//     ╰──────────┴────────────┴──────────────┴───────────────┼───────────────┼────────────────┼──────╮  ╭───────┼──────────────┼──────┼────────────┴──────────────┴──────────┴─────────╯
+                                                               &none           &none            &none      &none  &none          &none
+//                                                            ╰───────────────┴────────────────┴──────╯  ╰───────┴──────────────┴──────╯
+                        >;
+                        display-name = "ACC-SEL";
+                };
+
+                // ─── Acute accent: á é í ó ú ──────────────────────────────────────────────
+                acute_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬─────────────────┬──────┬──────╮                 ╭──────┬─────────────────┬─────────────────┬─────────────────┬──────┬──────╮
+        &none  &none  &none  &uc UC_ES_E_ACUTE  &none  &none                    &none  &uc UC_ES_U_ACUTE  &uc UC_ES_I_ACUTE  &uc UC_ES_O_ACUTE  &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼─────────────────┼─────────────────┼──────┼──────┤
+        &none  &uc UC_ES_A_ACUTE &none &none    &none  &none                    &none  &none              &none              &none              &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼─────────────────┼─────────────────┼──────┼──────┤
+        &none  &none  &none  &none              &none  &none                    &none  &none              &none              &none              &none  &none
+//     ╰──────┴──────┴──────┴─────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼─────────────────┼─────────────────┴─────────────────┴──────┴──────╯
+                                               &none  &none  &none     &none   &none  &none
+//                                            ╰──────┴──────┴──────╯  ╰───────┴──────┴─────────────────╯
+                        >;
+                        display-name = "ACUTE";
+                };
+
+                // ─── Grave accent: à è ù ─────────────────────────────────────────────────
+                grave_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬─────────────────┬──────┬──────╮                 ╭──────┬─────────────────┬──────┬──────┬──────┬──────╮
+        &none  &none  &none  &uc UC_FR_E_GRAVE  &none  &none                    &none  &uc UC_FR_U_GRAVE  &none  &none  &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼──────┼──────┼──────┼──────┤
+        &none  &uc UC_FR_A_GRAVE &none &none    &none  &none                    &none  &none              &none  &none  &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼──────┼──────┼──────┼──────┤
+        &none  &none  &none  &none              &none  &none                    &none  &none              &none  &none  &none  &none
+//     ╰──────┴──────┴──────┴─────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼─────────────────┼──────┴──────┴──────┴──────╯
+                                               &none  &none  &none     &none   &none  &none
+//                                            ╰──────┴──────┴──────╯  ╰───────┴──────┴─────────────────╯
+                        >;
+                        display-name = "GRAVE";
+                };
+
+                // ─── Circumflex accent: â ê î ô û ────────────────────────────────────────
+                circumflex_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬───────────────────────┬──────┬──────╮                 ╭──────┬───────────────────────┬───────────────────────┬───────────────────────┬──────┬──────╮
+        &none  &none  &none  &uc UC_FR_E_CIRCUMFLEX   &none  &none                    &none  &uc UC_FR_U_CIRCUMFLEX   &uc UC_FR_I_CIRCUMFLEX   &uc UC_FR_O_CIRCUMFLEX   &none  &none
+//     ├──────┼──────┼──────┼───────────────────────┼──────┼──────┤                 ├──────┼───────────────────────┼───────────────────────┼───────────────────────┼──────┼──────┤
+        &none  &uc UC_FR_A_CIRCUMFLEX &none &none     &none  &none                    &none  &none                   &none                   &none                   &none  &none
+//     ├──────┼──────┼──────┼───────────────────────┼──────┼──────┤                 ├──────┼───────────────────────┼───────────────────────┼───────────────────────┼──────┼──────┤
+        &none  &none  &none  &none                    &none  &none                    &none  &none                   &none                   &none                   &none  &none
+//     ╰──────┴──────┴──────┴───────────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼───────────────────────┼───────────────────────┴───────────────────────┴──────┴──────╯
+                                                     &none  &none  &none     &none   &none  &none
+//                                                  ╰──────┴──────┴──────╯  ╰───────┴──────┴───────────────────────╯
+                        >;
+                        display-name = "CIRC";
+                };
+
+                // ─── Diaeresis / Umlaut: ä ë ï ö ü ÿ ────────────────────────────────────
+                diaeresis_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬──────────────────────┬──────┬──────╮                 ╭─────────────────────┬──────────┬───────────────────────┬──────────┬──────────────────────┬────────────────────╮
+        &none  &none  &none  &uc UC_FR_E_DIAERESIS   &none  &none                    &uc UC_FR_Y_DIAERESIS  &uc UC_DE_UE &uc UC_FR_I_DIAERESIS  &uc UC_DE_OE &none                  &none
+//     ├──────┼──────┼──────┼──────────────────────┼──────┼──────┤                 ├─────────────────────┼──────────┼───────────────────────┼──────────┼──────────────────────┼────────────────────┤
+        &none  &uc UC_DE_AE  &none &none             &none  &none                    &none                 &none       &none                   &none       &uc UC_LOW_DBL_QUOTE   &uc UC_L_DBL_QUOTE
+//     ├──────┼──────┼──────┼──────────────────────┼──────┼──────┤                 ├─────────────────────┼──────────┼───────────────────────┼──────────┼──────────────────────┼────────────────────┤
+        &none  &none  &none  &none                   &none  &none                    &none                 &none       &none                   &uc UC_R_DBL_QUOTE &none            &none
+//     ╰──────┴──────┴──────┴──────────────────────┼──────┼──────┼──────╮  ╭───────┼─────────────────────┼──────────┼───────────────────────┴──────────────────┴──────────────────────┴────────────────────╯
+                                                    &none  &none  &none     &none   &none  &none
+//                                                 ╰──────┴──────┴──────╯  ╰───────┴──────┴─────────────────────────────────────────────────────╯
+                        >;
+                        display-name = "DIAER";
+                };
+
+                // ─── Special: æ œ ç ñ ß ─────────────────────────────────────────────────
+                special_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬──────┬──────┬──────╮                 ╭────────────────┬────────────────┬────────────────┬──────────┬──────┬──────╮
+        &none  &none  &none  &none  &none  &none                    &none            &uc UC_L_GUILLEMET &none           &uc UC_FR_OE &none &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├────────────────┼────────────────┼────────────────┼──────────┼──────┼──────┤
+        &none  &uc UC_FR_AE  &uc UC_DE_SS &none &none &none         &none            &none            &none           &none       &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├────────────────┼────────────────┼────────────────┼──────────┼──────┼──────┤
+        &none  &none  &none  &uc UC_ES_C_CEDILLA &none &none        &uc UC_ES_N_TILDE &none           &uc UC_R_GUILLEMET &none    &uc UC_INV_QMARK &uc UC_INV_EXCL
+//     ╰──────┴──────┴──────┴──────┼──────┼──────┼──────╮  ╭───────┼────────────────┼────────────────┼────────────────┴──────────┴───────────────┴───────────────╯
+                                   &none  &none  &none     &none   &none            &none
+//                                ╰──────┴──────┴──────╯  ╰───────┴────────────────┴────────────────╯
+                        >;
+                        display-name = "SPECIAL";
+                };
+
+                // ─── Ogonek: ą ę į ų ─────────────────────────────────────────────────
+                ogonek_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬─────────────────┬──────┬──────╮                 ╭──────┬─────────────────┬────────────────┬──────┬──────┬──────╮
+        &none  &none  &none  &uc UC_PL_E_OGONEK &none  &none                   &none  &uc UC_U_OGONEK    &uc UC_I_OGONEK  &none  &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼────────────────┼──────┼──────┼──────┤
+        &none  &uc UC_PL_A_OGONEK &none &none   &none  &none                   &none  &none              &none            &none  &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼────────────────┼──────┼──────┼──────┤
+        &none  &none  &none  &none             &none  &none                   &none  &none              &none            &none  &none  &none
+//     ╰──────┴──────┴──────┴─────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼─────────────────┼────────────────┴──────┴──────┴──────╯
+                                               &none  &none  &none     &none   &none  &none
+//                                            ╰──────┴──────┴──────╯  ╰───────┴──────┴─────────────────╯
+                        >;
+                        display-name = "OGONK";
+                };
+
+                // ─── Dot marks: below (a,e,i,o,u) and above (z,c,s) ───────────────────
+                dot_marks_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬─────────────────┬──────┬──────╮                 ╭──────┬─────────────────┬─────────────────┬─────────────────┬──────┬──────╮
+        &none  &none  &none  &uc UC_E_DOT_BELOW &none  &none                   &none  &uc UC_U_DOT_BELOW &uc UC_I_DOT_BELOW &uc UC_O_DOT_BELOW &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼─────────────────┼─────────────────┼──────┼──────┤
+        &none  &uc UC_A_DOT_BELOW &uc UC_S_DOT_ABOVE &none &none &none          &none  &none             &none             &none             &none  &none
+//     ├──────┼──────┼──────┼─────────────────┼──────┼──────┤                 ├──────┼─────────────────┼─────────────────┼─────────────────┼──────┼──────┤
+        &none  &uc UC_PL_Z_DOT &none &uc UC_C_DOT_ABOVE &none &none             &none  &none             &none             &none             &none  &none
+//     ╰──────┴──────┴──────┴─────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼─────────────────┼─────────────────┴─────────────────┴──────┴──────╯
+                                               &none  &none  &none     &none   &none  &none
+//                                            ╰──────┴──────┴──────╯  ╰───────┴──────┴─────────────────╯
+                        >;
+                        display-name = "DOT";
+                };
+
+                // ─── Comma-below: ș ț ─────────────────────────────────────────────────
+                comma_below_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬──────┬──────┬──────╮                 ╭──────┬──────┬──────┬──────┬──────┬──────╮
+        &none  &none  &none  &none  &none  &none                    &none  &none  &none  &none  &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼──────┤
+        &none  &none  &uc UC_RO_S &none &none &none                  &none  &none  &none  &none  &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼──────┤
+        &none  &none  &none  &none  &none  &none                    &uc UC_RO_T &none &none &none &none &none
+//     ╰──────┴──────┴──────┴──────┼──────┼──────┼──────╮  ╭───────┼──────┼──────┼──────┴──────┴──────┴──────╯
+                                   &none  &none  &none     &none   &none  &none
+//                                ╰──────┴──────┴──────╯  ╰───────┴──────┴──────╯
+                        >;
+                        display-name = "COMMA";
+                };
+
+                // ─── Double acute: ő ű ────────────────────────────────────────────────
+                dbl_acute_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬──────┬──────┬──────╮                 ╭──────┬──────────────────┬──────┬──────────────────┬──────┬──────╮
+        &none  &none  &none  &none  &none  &none                    &none  &uc UC_U_DOUBLE_ACUTE &none &uc UC_O_DOUBLE_ACUTE &none &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────────────────┼──────┼──────────────────┼──────┼──────┤
+        &none  &none  &none  &none  &none  &none                    &none  &none               &none  &none               &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────────────────┼──────┼──────────────────┼──────┼──────┤
+        &none  &none  &none  &none  &none  &none                    &none  &none               &none  &none               &none  &none
+//     ╰──────┴──────┴──────┴──────┼──────┼──────┼──────╮  ╭───────┼──────┼──────────────────┼──────┴──────────────────┴──────┴──────╯
+                                   &none  &none  &none     &none   &none  &none
+//                                ╰──────┴──────┴──────╯  ╰───────┴──────┴──────────────────╯
+                        >;
+                        display-name = "DBL-AC";
+                };
+
+                // ─── Caron/Breve: č š ž ř ň ď ť ľ + ă ĕ ğ ──────────────────────────────
+                caron_breve_layer {
+                        bindings = <
+//     ╭──────┬──────┬────────────────┬────────────────┬────────────────┬──────╮                 ╭──────┬────────────────┬──────┬────────────────┬──────┬──────╮
+        &none  &none  &uc UC_E_BREVE   &none            &none            &uc UC_G_BREVE           &none  &none            &none  &none            &none  &none
+//     ├──────┼──────┼────────────────┼────────────────┼────────────────┼──────┤                 ├──────┼────────────────┼──────┼────────────────┼──────┼──────┤
+        &none  &uc UC_RO_A &uc UC_CS_SC &uc UC_CS_DC &none &none                                 &none  &uc UC_CS_NC     &none  &uc UC_CS_RC     &none  &none
+//     ├──────┼──────┼────────────────┼────────────────┼────────────────┼──────┤                 ├──────┼────────────────┼──────┼────────────────┼──────┼──────┤
+        &none  &uc UC_CS_ZC &none &uc UC_CS_CC &none &none                                   &uc UC_CS_TC &none &none &none &none &none
+//     ╰──────┴──────┴────────────────┴────────────────┼────────────────┼──────┼──────╮  ╭───────┼──────┼────────────────┼──────┴────────────────┴──────┴──────╯
+                                                       &none            &none  &none     &none   &none  &none
+//                                                    ╰────────────────┴──────┴──────╯  ╰───────┴──────┴────────────────╯
+                        >;
+                        display-name = "CARON";
+                };
+
+                // ─── Ring: å ů ─────────────────────────────────────────────────────────
+                ring_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬──────┬──────┬──────╮                 ╭──────┬────────────┬──────┬──────┬──────┬──────╮
+        &none  &none  &none  &none  &none  &none                    &none  &uc UC_CS_UR  &none  &none  &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼────────────┼──────┼──────┼──────┼──────┤
+        &none  &uc UC_A_RING &none &none &none &none                &none  &none         &none  &none  &none  &none
+//     ├──────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼────────────┼──────┼──────┼──────┼──────┤
+        &none  &none  &none  &none  &none  &none                    &none  &none         &none  &none  &none  &none
+//     ╰──────┴──────┴──────┴──────┼──────┼──────┼──────╮  ╭───────┼──────┼────────────┼──────┴──────┴──────┴──────╯
+                                   &none  &none  &none     &none   &none  &none
+//                                ╰──────┴──────┴──────╯  ╰───────┴──────┴────────────╯
+                        >;
+                        display-name = "RING";
+                };
+
+                // ─── Macron: ā ē ī ō ū ────────────────────────────────────────────────
+                macron_layer {
+                        bindings = <
+//     ╭──────┬──────┬──────┬────────────────┬──────┬──────╮                 ╭──────┬────────────────┬────────────────┬────────────────┬──────┬──────╮
+        &none  &none  &none  &uc UC_E_MACRON  &none  &none                    &none  &uc UC_U_MACRON   &uc UC_I_MACRON   &uc UC_O_MACRON   &none  &none
+//     ├──────┼──────┼──────┼────────────────┼──────┼──────┤                 ├──────┼────────────────┼────────────────┼────────────────┼──────┼──────┤
+        &none  &uc UC_A_MACRON &none &none    &none  &none                    &none  &none             &none             &none             &none  &none
+//     ├──────┼──────┼──────┼────────────────┼──────┼──────┤                 ├──────┼────────────────┼────────────────┼────────────────┼──────┼──────┤
+        &none  &none  &none  &none            &none  &none                    &none  &none             &none             &none             &none  &none
+//     ╰──────┴──────┴──────┴────────────────┼──────┼──────┼──────╮  ╭───────┼──────┼────────────────┼────────────────┴────────────────┴──────┴──────╯
+                                              &none  &none  &none     &none   &none  &none
+//                                           ╰──────┴──────┴──────╯  ╰───────┴──────┴────────────────╯
+                        >;
+                        display-name = "MACRON";
                 };
         };
 };
