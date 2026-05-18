@@ -165,6 +165,13 @@ ZMK_MOD_MORPH(table_flip_morph,
                 bindings = <&sl ACCENT_SEL>;
                 layers = <BASE>;
             };
+            // LSHIFT + RSIFT → CAPSLOCK
+            combo_capslck {
+                timeout-ms = <50>;
+                key-positions = <0 38>;
+                bindings = <&kp CAPS>;
+                layers = <BASE>;
+            };
         };
 
         // Activate ADJUST layer by pressing raise and lower
