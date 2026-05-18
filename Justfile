@@ -16,14 +16,28 @@ _parse_targets $expr: _check_yq_version
     echo "$(yq -r "$filter" {{build_matrix}} | grep -v "^," | grep -i "${expr/#all/.*}")"
 
 # build firmware for single board & shield combination
-_build_single $board $shield $snippet $keymap $extra_conf $artifact cmake_args *west_args:
+_build_single $board $shield $snippet $keymap $extra_conf $artifact cmake_args $debug *west_args:
     #!/usr/bin/env bash
     set -euo pipefail
     artifact="${artifact:-${shield:+${shield// /+}-}${board//\//_}}"
     build_dir="{{ build / '$artifact' }}"
+    effective_snippet="$snippet"
+    snippet_args=()
+
+    if [[ "$debug" == "1" ]]; then
+        if [[ -z "$effective_snippet" ]]; then
+            effective_snippet="zmk-usb-logging"
+        elif [[ " $effective_snippet " != *" zmk-usb-logging "* ]]; then
+            effective_snippet="$effective_snippet zmk-usb-logging"
+        fi
+    fi
+
+    for snippet_name in $effective_snippet; do
+        snippet_args+=( -S "$snippet_name" )
+    done
 
     echo "Building firmware for $artifact..."
-    west build -s zmk/app -d "$build_dir" -b $board {{ west_args }} ${snippet:+-S "$snippet"} -- \
+    west build -s zmk/app -d "$build_dir" -b $board {{ west_args }} "${snippet_args[@]}" -- \
         -DZMK_CONFIG="{{ config }}" ${shield:+-DSHIELD="$shield"} ${keymap:+-DKEYMAP_FILE="{{ config }}/$keymap.keymap"} ${extra_conf:+-DEXTRA_CONF_FILE="{{ config }}/$extra_conf.conf"} {{ cmake_args }}
 
     if [[ -f "$build_dir/zephyr/zmk.uf2" ]]; then
@@ -36,11 +50,28 @@ _build_single $board $shield $snippet $keymap $extra_conf $artifact cmake_args *
 build expr *west_args:
     #!/usr/bin/env bash
     set -euo pipefail
+    debug=0
+    filtered_west_args=()
+
+    set -- {{ west_args }}
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --debug)
+                debug=1
+                shift
+                ;;
+            *)
+                filtered_west_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
     targets=$(just build_matrix={{build_matrix}} _parse_targets {{ expr }})
 
     [[ -z $targets ]] && echo "No matching targets found. Aborting..." >&2 && exit 1
     echo "$targets" | while IFS=, read -r board shield snippet keymap extra_conf artifact cmake_args; do
-        just _build_single "$board" "$shield" "$snippet" "$keymap" "$extra_conf" "$artifact" "$cmake_args" {{ west_args }}
+        just _build_single "$board" "$shield" "$snippet" "$keymap" "$extra_conf" "$artifact" "$cmake_args" "$debug" "${filtered_west_args[@]}"
     done
 
 # clear build cache and artifacts
