@@ -113,7 +113,7 @@ ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_4, 4)
 ZMK_MACRO(table_flip,
     wait-ms = <30>;
     tap-ms = <10>;
-        bindings = <&macro_press &uc UC_SAME(0x28) &uc UC_SAME(0x256F) &uc UC_SAME(0x00B0) &uc UC_SAME(0x25A1) &uc UC_SAME(0x00B0) &uc UC_SAME(0x29) &uc UC_SAME(0x256F) &uc UC_SAME(0xFE35) &uc UC_SAME(0x20) &uc UC_SAME(0x253B) &uc UC_SAME(0x2501) &uc UC_SAME(0x253B)>;
+        bindings = <&uc UC_SAME(0x28) &uc UC_SAME(0x256F) &uc UC_SAME(0x00B0) &uc UC_SAME(0x25A1) &uc UC_SAME(0x00B0) &uc UC_SAME(0x29) &uc UC_SAME(0x256F) &uc UC_SAME(0xFE35) &uc UC_SAME(0x20) &uc UC_SAME(0x253B) &uc UC_SAME(0x2501) &uc UC_SAME(0x253B)>;
 )
 
 // ┬─┬ノ( º _ ºノ)
@@ -294,7 +294,7 @@ ZMK_MOD_MORPH(table_flip_morph,
 // ╭───────┬─────┬─────┬─────┬─────┬─────╮   ╭──────────┬─────┬─────┬─────┬─────┬───────╮
 // │ BTCLR │ BT1 │ BT2 │ BT3 │ BT4 │ BT5 │   │ UCM_WIN  │     │     │     │     │       │
 // ├───────┼─────┼─────┼─────┼─────┼─────┤   ├──────────┼─────┼─────┼─────┼─────┼───────┤
-// │OUTTOG │     │     │ ಠ_ಠ│(╯°□°│     │   │UCM_LINUX │     │     │     │     │       │
+// │OUTTOG │     │     │ ಠ_ಠ│     │     │   │UCM_LINUX │     │     │     │     │       │
 // ├───────┼─────┼─────┼─────┼─────┼─────┤   ├──────────┼─────┼─────┼─────┼─────┼───────┤
 // │       │     │     │     │     │     │   │ UCM_MAC  │     │     │     │     │       │
 // ╰───────┴─────┴─────┼─────┼─────┼─────┤   ├──────────┼─────┼─────┼─────┴─────┴───────╯
@@ -304,7 +304,7 @@ ZMK_MOD_MORPH(table_flip_morph,
 //     ╭──────────────┬───────────────┬──────────────┬───────────────┬───────────────┬───────────────╮                  ╭──────────────┬──────┬──────┬──────┬──────┬──────╮
         &bt BT_CLR     &bt_sel_disc_0  &bt_sel_disc_1 &bt_sel_disc_2  &bt_sel_disc_3  &bt_sel_disc_4                     &uc_mode_win   &none  &none  &none  &none  &none
 //     ├──────────────┼───────────────┼──────────────┼───────────────┼───────────────┼───────────────┤                  ├──────────────┼──────┼──────┼──────┼──────┼──────┤
-        &out OUT_TOG   &none           &none          &stare_morph    &table_flip_morph &none                            &uc_mode_linux &none  &none  &none  &none  &none
+        &out OUT_TOG   &none           &none          &stare_morph    &none           &none                            &uc_mode_linux &none  &none  &none  &none  &none
 //     ├──────────────┼───────────────┼──────────────┼───────────────┼───────────────┼───────────────┤                  ├──────────────┼──────┼──────┼──────┼──────┼──────┤
         &none          &none           &none          &none           &none           &none                              &uc_mode_mac   &none  &none  &none  &none  &none
 //     ╰──────────────┴───────────────┴──────────────┴───────────────┼───────────────┼───────────────┼───────╮  ╭───────┼──────────────┼──────┼──────┴──────┴──────┴──────╯
