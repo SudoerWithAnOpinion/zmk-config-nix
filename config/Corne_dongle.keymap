@@ -93,7 +93,7 @@ ZMK_TAP_DANCE(td_lshift_capsw,
 )
 
 ZMK_MOD_MORPH(acute_dblacute_sel,
-        bindings = <&sl ACUTE>, <&sl DBL_ACUTE>;
+        bindings = <&asl ACUTE>, <&asl DBL_ACUTE>;
         mods = <(MOD_LSFT|MOD_RSFT)>;
 )
 
@@ -113,7 +113,7 @@ ZMK_BT_SEL_DISC_SHIFT(bt_sel_disc_4, 4)
 ZMK_MACRO(table_flip,
     wait-ms = <30>;
     tap-ms = <10>;
-        bindings = <&uc UC_SAME(0x28) &uc UC_SAME(0x256F) &uc UC_SAME(0x00B0) &uc UC_SAME(0x25A1) &uc UC_SAME(0x00B0) &uc UC_SAME(0x29) &uc UC_SAME(0x256F) &uc UC_SAME(0xFE35) &kp SPACE &uc UC_SAME(0x253B) &uc UC_SAME(0x2501) &uc UC_SAME(0x253B)>;
+        bindings = <&macro_press &uc UC_SAME(0x28) &uc UC_SAME(0x256F) &uc UC_SAME(0x00B0) &uc UC_SAME(0x25A1) &uc UC_SAME(0x00B0) &uc UC_SAME(0x29) &uc UC_SAME(0x256F) &uc UC_SAME(0xFE35) &uc UC_SAME(0x20) &uc UC_SAME(0x253B) &uc UC_SAME(0x2501) &uc UC_SAME(0x253B)>;
 )
 
 // ┬─┬ノ( º _ ºノ)
@@ -133,7 +133,7 @@ ZMK_MACRO(stare,
 // ( つ ◕_◕ )つ
 ZMK_MACRO(hug,
     wait-ms = <30>;
-    tap-ms = <10>;
+    tap-ms = <20>;
         bindings = <&uc UC_SAME(0x28) &kp SPACE &uc UC_SAME(0x3064) &kp SPACE &uc UC_SAME(0x25D5) &kp UNDER &uc UC_SAME(0x25D5) &kp SPACE &uc UC_SAME(0x29) &uc UC_SAME(0x3064)>;
 )
 
@@ -184,6 +184,13 @@ ZMK_MOD_MORPH(table_flip_morph,
             };
         };
         behaviors {
+                        asl: accent_sticky_layer {
+                                compatible = "zmk,behavior-sticky-key";
+                                #binding-cells = <1>;
+                                release-after-ms = <1500>;
+                                bindings = <&mo>;
+                                display-name = "ACC-SL";
+                        };
             uc_mode_win: uc_mode_win {
                 compatible = "zmk,behavior-mod-morph";
                 #binding-cells = <0>;
@@ -217,6 +224,7 @@ ZMK_MOD_MORPH(table_flip_morph,
 // ╰───────┴─────┴─────┴─────┼─────┼─────┼─────╮  ╭─────┼─────┼─────┼─────┴─────┴─────┴────────╯
 //                           │ GUI │ LWR │ SPC │  │ ENT │ RSE │ ALT │
 //                           ╰─────┴─────┴─────╯  ╰─────┴─────┴─────╯
+//                                                             Right Alt isn't working ಠ_ಠ - Use Left Alt
                         bindings = <
 //     ╭─────────────────┬──────┬──────┬──────┬─────────┬─────────╮                    ╭──────────┬─────────┬─────────┬────────┬────────┬─────────────╮
         &kp GRAVE         &kp Q  &kp W  &kp E  &kp R     &kp T                          &kp Y      &kp U     &kp I     &kp O    &kp P    &bksp_del_mod
@@ -313,11 +321,11 @@ ZMK_MOD_MORPH(table_flip_morph,
                 accent_sel_layer {
                         bindings = <
 //     ╭──────────┬────────────┬──────┬──────┬───────────────┬────────────────╮                 ╭──────────────┬──────┬──────┬──────────────┬──────────┬─────────╮
-        &sl GRAVE  &sl OGONEK   &none  &none  &sl CARON_BREVE &sl CIRCUMFLEX                     &none          &none  &none  &sl RING     &none      &none
+        &asl GRAVES &asl OGONEK   &none  &none  &asl CARON_BREVE &asl CIRCUMFLEX                     &none          &none  &none  &asl RING     &none      &none
 //     ├──────────┼────────────┼──────┼──────┼───────────────┼────────────────┤                 ├──────────────┼──────┼──────┼──────────────┼──────────┼─────────┤
-        &none      &none        &none  &none   &none           &none                              &none          &none  &none  &none          &sl DIAERESIS  &acute_dblacute_sel
+        &none      &none        &none  &none   &none           &none                              &none          &none  &none  &none          &asl DIAERESIS  &acute_dblacute_sel
 //     ├──────────┼────────────┼──────┼──────┼───────────────┼────────────────┤                 ├──────────────┼──────┼──────────────┼──────┼──────┼─────────┤
-        &none      &none        &sl MACRON  &none  &none           &none                              &none          &none  &sl COMMA_BELOW  &sl DOT_MARKS  &sl SPECIAL  &none
+        &none      &none        &asl MACRON  &none  &none           &none                              &none          &none  &asl COMMA_BELOW  &asl DOT_MARKS  &asl SPECIAL  &none
 //     ╰──────────┴────────────┴──────┴──────┼───────────────┼────────────────┼──────╮  ╭───────┼──────────────┼──────┼──────────────┴──────┴──────┴─────────╯
                                               &none           &none            &none      &none  &none          &none
 //                                           ╰───────────────┴────────────────┴──────╯  ╰───────┴──────────────┴──────╯
@@ -422,7 +430,7 @@ ZMK_MOD_MORPH(table_flip_morph,
 //     ├─────────┼────────────┼────────────┼────────────────────┼──────┼──────┤                 ├──────────────────┼────────────────┼────────────────┼─────────────┼──────┼─────────┤
         &none     &uc UC_FR_AE &uc UC_DE_SS &none                &none  &none                    &none              &none            &none            &none         &none  &none
 //     ├─────────┼────────────┼────────────┼────────────────────┼──────┼──────┤                 ├──────────────────┼────────────────┼────────────────┼─────────────┼──────┼─────────┤
-        &kp LSHFT &none        &none        &uc UC_ES_C_CEDILLA  &none  &none                    &uc UC_ES_N_TILDE  &none            &none             &none        &none  &kp RSHFT
+        &kp LSHFT &none        &none        &uc UC_ES_C_CEDILLA  &none  &none                    &uc UC_ES_N_TILDE  &none            &none            &none         &uc UC_DA_OE  &kp RSHFT
 //     ╰─────────┴────────────┴────────────┴────────────────────┼──────┼──────┼──────╮  ╭───────┼──────────────────┼────────────────┼────────────────┴─────────────┴──────┴─────────╯
                                                                  &none  &none  &none     &none   &none             &none
 //                                                              ╰──────┴──────┴──────╯  ╰───────┴──────────────────┴────────────────╯
