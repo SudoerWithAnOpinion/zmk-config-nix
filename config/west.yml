@@ -11,6 +11,9 @@ manifest:
     # Leader, Unicode, Helpers & Antecedent Morph Key Support
     - name: urob
       url-base: https://github.com/urob
+    # nice!view drivers
+    - name: mctechnology17
+      url-base: https://github.com/mctechnology17
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -37,6 +40,10 @@ manifest:
     # Helper Macros
     - name: zmk-helpers
       remote: urob
+      revision: main
+    # support nice_oled and nice_epaper
+    - name: zmk-nice-oled
+      remote: mctechnology17
       revision: main
   self:
     path: config

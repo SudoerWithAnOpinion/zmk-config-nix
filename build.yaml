@@ -52,25 +52,37 @@ include:
   # ## Firmwares (Dongle + Split)
   # - board: xiao_ble//zmk
   #   shield: Corne_dongle_central prospector_adapter
-  #   cmake-args: -DCONFIG_PROSPECTOR_STATUS_SCREEN_OPERATOR=y
-  #   artifact-name: corne_dongle_theme_operator
-  # - board: nice_nano//zmk
-  #   shield: Corne_dongle_left
-  #   artifact-name: corne_split_left
-  # - board: nice_nano//zmk
-  #   shield: Corne_dongle_right
-  #   artifact-name: corne_split_right
+  #   keymap: CORNE_AkitsuEcho
+  #   extra-conf: CORNE_AkitsuEcho
+  #   cmake-args: -DCONFIG_PROSPECTOR_STATUS_SCREEN_FIELD=y
+  #   artifact-name: akitsuecho_dongle
+
   - board: nice_nano//zmk
-    shield: Corne_L
+    shield: Corne_dongle_left
     keymap: CORNE_AkitsuEcho
     extra-conf: CORNE_AkitsuEcho
     artifact-name: akitsuecho_split_left
 
   - board: nice_nano//zmk
-    shield: Corne_R
+    shield: Corne_dongle_right
     keymap: CORNE_AkitsuEcho
     extra-conf: CORNE_AkitsuEcho
     artifact-name: akitsuecho_split_right
+  
+  # Generic Corne (Unnamed)
+  - board: nice_nano//zmk
+    shield: Corne_L nice_epaper
+    keymap: CORNE_AkitsuEcho
+    extra-conf: Corne
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: Corne_split_left
+
+  - board: nice_nano//zmk
+    shield: Corne_R nice_epaper
+    keymap: CORNE_AkitsuEcho
+    extra-conf: Corne
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
+    artifact-name: Corne_split_right
 
   # Resets
   - board: nice_nano//zmk
