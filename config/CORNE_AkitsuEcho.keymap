@@ -1,1 +1,4 @@
 #include "Corne_dongle.keymap"
+&kscan0 {
+    wakeup-source;
+};
