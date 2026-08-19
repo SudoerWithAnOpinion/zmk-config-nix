@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: CORNE_AkitsuEcho}
 layers:
   ROOT:
-    - '6'
+    - '`'
     - Q
     - W
     - E
@@ -67,7 +67,7 @@ layers:
     - '*'
     - (
     - )
-    - ''
+    - '|'
     - {t: $$akitsu_shift$$, s: CapsW}
     - '='
     - '-'
@@ -105,11 +105,11 @@ layers:
     - ''
     - ''
     - ''
+    - ←
+    - ↓
+    - ↑
+    - →
     - ''
-    - {t: ←, s: Home}
-    - {t: ↑, s: PgUp}
-    - {t: ↓, s: PgDn}
-    - {t: →, s: End}
     - F12
     - {t: $$akitsu_shift$$, s: CapsW}
     - ''
@@ -136,33 +136,33 @@ layers:
     - {t: BT 3, s: BT DISC}
     - {t: BT 4, s: BT DISC}
     - {t: BT, h: '4', s: BT DISC}
-    - {t: WinCmp, s: WinAlt}
     - ''
     - ''
     - ''
     - ''
     - ''
+    - Ins
     - OUT TOG
     - ''
     - ''
+    - {t: '&stare', s: '&hug'}
+    - ''
+    - ''
+    - Home
+    - PgUp
+    - PgDn
+    - End
     - ''
     - ''
     - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {t: WinCmp, s: WinAlt}
     - {t: Linux, s: LinAlt}
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
-    - ''
     - {t: macOS, s: Emacs}
-    - ''
-    - ''
     - ''
     - ''
     - ''
@@ -422,7 +422,7 @@ layers:
     - ''
     - ''
     - ''
-    - {type: held}
+    - {t: '&uc UC_DA_OE', type: held}
     - $$akitsu_shift$$
     - ''
     - ''
@@ -740,4 +740,7 @@ combos:
     l: [Combos]
   - p: [15, 16]
     k: {t: ACC-SEL, h: sticky}
+    l: [Combos]
+  - p: [0, 38]
+    k: CAPS
     l: [Combos]
