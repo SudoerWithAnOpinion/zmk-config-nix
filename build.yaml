@@ -71,14 +71,14 @@ include:
   
   # Generic Corne (Unnamed)
   - board: nice_nano//zmk
-    shield: Corne_L nice_epaper
+    shield: Corne_L Nice_view_config nice_epaper
     keymap: CORNE_AkitsuEcho
     extra-conf: Corne
     cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
     artifact-name: Corne_split_left
 
   - board: nice_nano//zmk
-    shield: Corne_R nice_epaper
+    shield: Corne_R Nice_view_config nice_epaper
     keymap: CORNE_AkitsuEcho
     extra-conf: Corne
     cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
