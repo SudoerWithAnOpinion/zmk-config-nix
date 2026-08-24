@@ -1,3 +1,4 @@
+[private]
 default:
     @just --list --unsorted
 
@@ -46,7 +47,31 @@ _build_single $board $shield $snippet $keymap $extra_conf $artifact cmake_args $
         mkdir -p "{{ out }}" && cp "$build_dir/zephyr/zmk.bin" "{{ out }}/$artifact.bin"
     fi
 
-# build firmware for matching targets
+# flash firmware for single board & shield combination
+# only needed for boards which do not support UF2
+_flash_single $board $shield $artifact:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    artifact="${artifact:-${shield:+${shield// /+}-}${board//\//_}}"
+    build_dir="{{ build / '$artifact' }}"
+
+    echo "Flashing firmware for $artifact..."
+    west flash -d "$build_dir"
+
+# List build targets. The sed chain removes version and build variants,
+# and prints the shield (if given) or otherwise the board name.
+[group('build & draw')]
+[doc('list build targets')]
+list:
+    @just build_matrix={{build_matrix}} _parse_targets all \
+        | sed 's|[@/][^,]*,|,|' \
+        | sed 's|\([^,]*\),\([^,]\+\),.*|\2|' \
+        | sed 's|\([^,]*\),,.*|\1|' \
+        | sort \
+        | column
+
+# build firmware for targets matching <expr>
+[group('build & draw')]
 build expr *west_args:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -74,20 +99,20 @@ build expr *west_args:
         just _build_single "$board" "$shield" "$snippet" "$keymap" "$extra_conf" "$artifact" "$cmake_args" "$debug" "${filtered_west_args[@]}"
     done
 
-# clear build cache and artifacts
-clean:
-    rm -rf {{ build }} {{ out }}
+# flash firmware for targets matching <expr>
+[group('build & draw')]
+flash expr: (build expr)
+    #!/usr/bin/env bash
+    set -euo pipefail
+    targets=$(just build_matrix={{build_matrix}} _parse_targets {{ expr }})
 
-# clear all automatically generated files
-clean-all: clean
-    rm -rf .west zmk
-
-# clear nix cache
-clean-nix:
-    nix-collect-garbage --delete-old
+    [[ -z $targets ]] && echo "No matching targets found. Aborting..." >&2 && exit 1
+    echo "$targets" | while IFS=, read -r board shield snippet artifact cmake_args; do
+        just _flash_single "$board" "$shield" "$artifact"
+    done
 
 # parse & plot keymap
-draw keymap='CORNE_AkitsuEcho' *FLAGS: _check_yq_version
+draw: _check_yq_version
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -293,40 +318,67 @@ draw keymap='CORNE_AkitsuEcho' *FLAGS: _check_yq_version
         done < <(yq -r '.layers | keys | .[]' "$keymap_yaml")
     fi
 
-# initialize west
+# initialize the west workspace
+[group('workspace')]
 init:
     west init -l config
     west update --fetch-opt=--filter=blob:none
     west zephyr-export
 
-# List build targets. The sed chain removes version and build variants,
-# and prints the shield (if given) or otherwise the board name.
-list:
-    @just build_matrix={{build_matrix}} _parse_targets all \
-        | sed 's|[@/][^,]*,|,|' \
-        | sed 's|\([^,]*\),\([^,]\+\),.*|\2|' \
-        | sed 's|\([^,]*\),,.*|\1|' \
-        | sort \
-        | column
-
-# update west
-update:
+# synchronize the west workspace (after manifest changes)
+[group('workspace')]
+sync:
     west update --fetch-opt=--filter=blob:none
 
-# upgrade zephyr-sdk and python dependencies
-upgrade-sdk:
+# bump west manifest and re-sync the workspace
+[group('workspace')]
+bump-west: && sync
+    pin-west bump
+
+# bump nix toolchain (flake.lock)
+[group('workspace')]
+bump-nix:
     nix flake update --flake .
 
-# warn user if they are using golang-yq and not python-yq
-[no-exit-message]
-_check_yq_version:
+# clear build cache and artifacts
+[group('cleanup')]
+clean:
+    rm -rf {{ build }} {{ out }}
+
+# garbage-collect the nix store (system-wide)
+[group('cleanup')]
+nix-gc:
+    nix-collect-garbage --delete-old
+
+# format devicetree files, or a single directory recursively
+[group('dev')]
+[no-cd]
+format *paths:
     #!/usr/bin/env bash
-    if yq --help 2>&1 | grep -qi 'eval'; then
-        echo "This script requires python-yq, but PATH contains golang-yq" >&2
-        echo "Please install python-yq or use the included nix shell" >&2
+    set -euo pipefail
+    paths=({{ paths }})
+
+    if [[ ${#paths[@]} -eq 0 ]]; then
+        echo "Usage: just format <file>... | <dir>" >&2
         exit 1
     fi
 
+    for path in "${paths[@]}"; do
+        if [[ -d "$path" ]]; then
+            if [[ ${#paths[@]} -gt 1 ]]; then
+                echo "A directory must be the only argument. Aborting..." >&2
+                exit 1
+            fi
+            cd "$path"
+            dts-format --fix
+            exit 0
+        fi
+    done
+
+    dts-format --fix "${paths[@]}"
+
+# run test suites (--auto-accept updates the snapshot)
+[group('dev')]
 [no-cd]
 test $testpath *FLAGS:
     #!/usr/bin/env bash
@@ -339,7 +391,7 @@ test $testpath *FLAGS:
     if [[ "{{ FLAGS }}" != *"--no-build"* ]]; then
         echo "Running $testcase..."
         rm -rf "$build_dir"
-        west build -s zmk/app -d "$build_dir" -b native_sim/native/64 -- \
+        west build -s zmk/app -d "$build_dir" -b native_sim//zmk_test_mock -- \
             -DCONFIG_ASSERT=y -DZMK_CONFIG="$config_dir"
     fi
 
@@ -354,3 +406,13 @@ test $testpath *FLAGS:
         cp ${build_dir}/keycode_events.log ${config_dir}/keycode_events.snapshot
     fi
     diff -auZ ${config_dir}/keycode_events.snapshot ${build_dir}/keycode_events.log
+
+# warn user if they are using golang-yq and not python-yq
+[no-exit-message]
+_check_yq_version:
+    #!/usr/bin/env bash
+    if yq --help 2>&1 | grep -qi 'eval'; then
+        echo "This script requires python-yq, but PATH contains golang-yq" >&2
+        echo "Please install python-yq or use the included nix shell" >&2
+        exit 1
+    fi
