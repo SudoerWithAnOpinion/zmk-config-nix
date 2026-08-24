@@ -112,7 +112,7 @@ flash expr: (build expr)
     done
 
 # parse & plot keymap
-draw: _check_yq_version
+draw keymap='CORNE_AkitsuEcho' *FLAGS: _check_yq_version
     #!/usr/bin/env bash
     set -euo pipefail
 
