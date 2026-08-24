@@ -149,8 +149,8 @@ layers:
     - ''
     - ''
     - Home
-    - PgUp
     - PgDn
+    - PgUp
     - End
     - ''
     - ''
