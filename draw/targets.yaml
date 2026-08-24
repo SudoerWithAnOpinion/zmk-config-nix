@@ -1,0 +1,5 @@
+AkitsuEcho:
+  keymap: CORNE_AkitsuEcho
+  drawer_config: config-AkitsuEcho.yaml
+  shield: Corne_dongle
+  layout_name: layout_0

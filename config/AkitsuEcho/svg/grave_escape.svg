@@ -1,0 +1,49 @@
+<svg
+   height="24"
+   viewBox="0 -960 1120 960"
+   width="28"
+   fill="#ff8a00"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="grave_escape.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     showguides="true"
+     inkscape:zoom="40.302883"
+     inkscape:cx="22.1076"
+     inkscape:cy="20.804963"
+     inkscape:window-width="1617"
+     inkscape:window-height="748"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <path
+     d="M 1089.7062,0 881.9777,-207.72851 v 186.09012 h -43.27677 v -259.66063 h 259.66067 v 43.27677 H 912.27144 L 1120,-30.29374 Z"
+     id="path1"
+     style="display:inline;stroke-width:0.54096" />
+  <path
+     style="font-size:1911.47px;font-family:'Cyber Alert';-inkscape-font-specification:'Cyber Alert';fill:#ffffff;stroke-width:74.1826"
+     d="M 680,-410.33337 525.33326,-629.66663 H 280 c 146.66674,145.99999 73.33326,72.66674 220.66674,219.33326 z"
+     id="text1"
+     aria-label="`" />
+  <path
+     d="m 963.41796,-863.62711 c -23.60365,-23.9361 -11.96805,-11.96805 -35.5717,-35.5717 H 764.94781 l -75.46519,75.79764 v 24.26854 h 121.01027 l 35.5717,-35.5717 35.5717,35.5717 h 162.89841 c 50.1993,-50.53176 24.9335,-25.26588 75.4653,-75.79764 v -24.26854 H 998.65721 Z"
+     id="text3"
+     style="font-size:680.849px;font-family:'Cyber Alert';-inkscape-font-specification:'Cyber Alert';fill:#ffffff;stroke-width:36.9928"
+     aria-label="~" />
+</svg>

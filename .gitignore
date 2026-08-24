@@ -7,3 +7,12 @@ zephyr
 zmk
 draw/base.yaml
 draw/overview.yaml
+draw/*/layers
+
+
+prospector-zmk-module/
+zmk-adaptive-key/
+zmk-for-PandaKB.com-/
+zmk-helpers/
+zmk-leader-key/
+zmk-unicode/

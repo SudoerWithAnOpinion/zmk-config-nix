@@ -1,0 +1,344 @@
+parse_config:
+  zmk_additional_includes:
+    - "modules/zmk/helpers/include"
+
+  zmk_preamble: |
+    #include <zmk-helpers/key-labels/34.h>
+    #define CONFIG_WIRELESS
+
+  raw_binding_map:
+    "&sys_reset": Reset
+    "&bootloader": Boot
+    "&caps_word": Caps Word
+    "&kp LA(F4)": Close
+
+    "&bt BT_SEL 0": BT 1
+    "&bt BT_SEL 1": BT 2
+    "&bt BT_SEL 2": BT 3
+    "&bt BT_SEL 3": BT 4
+
+    "ASCEND": "$$akitsu_raise$$"
+    "DESCEND": "$$akitsu_lower$$"
+   
+
+    "&hml LS(LALT)TAB": Tab
+    "&hm_combo_ldr": Leader
+    "&hm_combo_ldrsh": Shift+Leader
+    "&td_lshift_capsw": { "t": "$$akitsu_shift$$", "s": CapsW }
+    "&hm_combo_lpar": { "t": "< (" }
+    "&hm_combo_rpar": { "t": "> )"}
+    "&kp LBKT": { "t": "{ ["}
+    "&kp RBKT": { "t": "} ]"}
+
+    "&uc UC_SET_WIN_COMPOSE": WinCmp
+    "&uc UC_SET_WIN_ALT": WinAlt
+    "&uc UC_SET_LINUX": Linux
+    "&uc UC_SET_LINUX_ALT": LinAlt
+    "&uc UC_SET_MACOS": macOS
+    "&uc UC_SET_EMACS": Emacs
+
+    "&uc UC_ES_E_ACUTE": { "t": "é", "s": "É" }
+    "&uc UC_ES_U_ACUTE": { "t": "ú", "s": "Ú" }
+    "&uc UC_ES_I_ACUTE": { "t": "í", "s": "Í" }
+    "&uc UC_ES_O_ACUTE": { "t": "ó", "s": "Ó" }
+    "&uc UC_ES_A_ACUTE": { "t": "á", "s": "Á" }
+    "&uc UC_ES_N_TILDE": { "t": "ñ", "s": "Ñ" }
+    "&uc UC_ES_C_CEDILLA": { "t": "ç", "s": "Ç" }
+
+    "&uc UC_FR_E_GRAVE": { "t": "è", "s": "È" }
+    "&uc UC_FR_U_GRAVE": { "t": "ù", "s": "Ù" }
+    "&uc UC_FR_A_GRAVE": { "t": "à", "s": "À" }
+    "&uc UC_FR_E_CIRCUMFLEX": { "t": "ê", "s": "Ê" }
+    "&uc UC_FR_U_CIRCUMFLEX": { "t": "û", "s": "Û" }
+    "&uc UC_FR_I_CIRCUMFLEX": { "t": "î", "s": "Î" }
+    "&uc UC_FR_O_CIRCUMFLEX": { "t": "ô", "s": "Ô" }
+    "&uc UC_FR_A_CIRCUMFLEX": { "t": "â", "s": "Â" }
+    "&uc UC_FR_E_DIAERESIS": { "t": "ë", "s": "Ë" }
+    "&uc UC_FR_I_DIAERESIS": { "t": "ï", "s": "Ï" }
+    "&uc UC_FR_Y_DIAERESIS": { "t": "ÿ", "s": "Ÿ" }
+    "&uc UC_FR_OE": { "t": "œ", "s": "Œ" }
+    "&uc UC_FR_AE": { "t": "æ", "s": "Æ" }
+
+    "&uc UC_DE_UE": { "t": "ü", "s": "Ü" }
+    "&uc UC_DE_OE": { "t": "ö", "s": "Ö" }
+    "&uc UC_DE_AE": { "t": "ä", "s": "Ä" }
+    "&uc UC_DE_SS": { "t": "ß", "s": "ẞ" }
+
+    "&uc UC_PL_E_OGONEK": { "t": "ę", "s": "Ę" }
+    "&uc UC_PL_A_OGONEK": { "t": "ą", "s": "Ą" }
+    "&uc UC_PL_Z_DOT": { "t": "ż", "s": "Ż" }
+
+    "&uc UC_RO_A": { "t": "ă", "s": "Ă" }
+    "&uc UC_RO_S": { "t": "ș", "s": "Ș" }
+    "&uc UC_RO_T": { "t": "ț", "s": "Ț" }
+
+    "&uc UC_CS_RC": { "t": "ř", "s": "Ř" }
+    "&uc UC_CS_TC": { "t": "ť", "s": "Ť" }
+    "&uc UC_CS_SC": { "t": "š", "s": "Š" }
+    "&uc UC_CS_DC": { "t": "ď", "s": "Ď" }
+    "&uc UC_CS_ZC": { "t": "ž", "s": "Ž" }
+    "&uc UC_CS_CC": { "t": "č", "s": "Č" }
+    "&uc UC_CS_NC": { "t": "ň", "s": "Ň" }
+    "&uc UC_CS_UR": { "t": "ů", "s": "Ů" }
+
+    "&uc UC_DEGREE_CELSIUS": ℃
+    "&uc UC_DEGREE_FAHRENHEIT": ℉
+
+    "&uc 0x00bf 0x00bf": "¿"
+    "&uc 0x00a1 0x00a1": "¡"
+    "&uc 0x00ec 0x00cc": { "t": "ì", "s": "Ì" }
+    "&uc 0x00f2 0x00d2": { "t": "ò", "s": "Ò" }
+    "&uc 0x00ab 0x00ab": "«"
+    "&uc 0x00bb 0x00bb": "»"
+    "&uc 0x201e 0x201e": "„"
+    "&uc 0x201c 0x201c": "“"
+    "&uc 0x201d 0x201d": "”"
+
+    "&uc 0x173 0x172": { "t": "ų", "s": "Ų" }
+    "&uc 0x12f 0x12e": { "t": "į", "s": "Į" }
+    "&uc 0x1eb9 0x1eb8": { "t": "ẹ", "s": "Ẹ" }
+    "&uc 0x1ee5 0x1ee4": { "t": "ụ", "s": "Ụ" }
+    "&uc 0x1ecb 0x1eca": { "t": "ị", "s": "Ị" }
+    "&uc 0x1ecd 0x1ecc": { "t": "ọ", "s": "Ọ" }
+    "&uc 0x1ea1 0x1ea0": { "t": "ạ", "s": "Ạ" }
+    "&uc 0x1e61 0x1e60": { "t": "ṡ", "s": "Ṡ" }
+    "&uc 0x10b 0x10a": { "t": "ċ", "s": "Ċ" }
+
+    "&uc 0x171 0x170": { "t": "ű", "s": "Ű" }
+    "&uc 0x151 0x150": { "t": "ő", "s": "Ő" }
+    "&uc 0x115 0x114": { "t": "ĕ", "s": "Ĕ" }
+    "&uc 0x11b 0x11a": { "t": "ě", "s": "Ě" }
+    "&uc 0x11f 0x11e": { "t": "ğ", "s": "Ğ" }
+    "&uc 0x13e 0x13d": { "t": "ľ", "s": "Ľ" }
+    "&uc 0x00e5 0x00c5": { "t": "å", "s": "Å" }
+
+    "&uc 0x0113 0x0112": { "t": "ē", "s": "Ē" }
+    "&uc 0x016b 0x016a": { "t": "ū", "s": "Ū" }
+    "&uc 0x012b 0x012a": { "t": "ī", "s": "Ī" }
+    "&uc 0x014d 0x014c": { "t": "ō", "s": "Ō" }
+    "&uc 0x0101 0x0100": { "t": "ā", "s": "Ā" }
+
+    "&mmv MOVE_UP": Mouse ↑
+    "&mmv MOVE_DOWN": Mouse ↓
+    "&mmv MOVE_LEFT": Mouse ←
+    "&mmv MOVE_RIGHT": Mouse →
+
+    "&msc SCRL_UP": Scroll ↑
+    "&msc SCRL_DOWN": Scroll ↓
+    "&msc SCRL_LEFT": Scroll ←
+    "&msc SCRL_RIGHT": Scroll →
+
+    "&mkp LCLK": Left Click
+    "&mkp RCLK": Right Click
+    "&mkp MCLK": Middle Click
+    "&mkp MB4": Back Click
+    "&mkp MB5": Forward Click
+
+  trans_legend: { "t": "", "type": "trans" }
+  layer_legend_map:
+    ASCEND: "$$akitsu_raise$$"
+    DESCEND: "$$akitsu_lower$$"
+
+  zmk_combos:
+    combo_cut: { align: bottom, o: 0.15 }
+    combo_ldrsh: { align: top, o: 1.35 }
+
+    combo_lt: { hidden: true }
+    combo_gt: { hidden: true }
+    combo_lbrc: { hidden: true }
+    combo_rbrc: { hidden: true }
+
+  zmk_keycode_map:
+    # custom mappings
+    LALT: "$$akitsu_option$$"
+    RALT: "$$akitsu_option$$"
+    LCTRL: "$$akitsu_control$$"
+    RCTRL: "$$akitsu_control$$"
+    LGUI: "$$akitsu_command$$"
+    RGUI: "$$akitsu_command$$"
+    LSHFT: "$$akitsu_shift$$"
+    RSHFT: "$$akitsu_shift$$"
+
+    BSPC: "$$akitsu_backspace$$"
+    DEL: "$$akitsu_delete$$"
+    ESC: "$$akitsu_escape$$"
+    RET: "$$akitsu_return$$"
+    SPACE: Spc
+    TAB: "$$akitsu_tab$$"
+
+    PG_UP: PgUp
+    PG_DN: PgDn
+    INS: Ins
+    HOME: Home
+    END: End
+
+    UP: ↑
+    DOWN: ↓
+    LEFT: ←
+    RIGHT: →
+
+    K_CANCEL: Cancel
+
+    C_MUTE: $$mdi:volume-off$$
+    C_PP: $$mdi:play-pause$$
+    C_VOL_UP: $$mdi:volume-high$$
+    C_VOL_DN: $$mdi:volume-medium$$
+    C_NEXT: $$mdi:skip-forward$$
+    C_PREV: $$mdi:skip-backward$$
+
+    # defaults
+    AMPERSAND: "&"
+    AMPS: "&"
+    APOS: "'"
+    APOSTROPHE: "'"
+    ASTERISK: "*"
+    ASTRK: "*"
+    AT: "@"
+    AT_SIGN: "@"
+    BACKSLASH: \
+    BSLH: \
+    CARET: ^
+    COLON: ":"
+    COMMA: ","
+    DLLR: $
+    DOLLAR: $
+    DOT: .
+    DOUBLE_QUOTES: '"'
+    DQT: '"'
+    EQUAL: "="
+    EXCL: "!"
+    EXCLAMATION: "!"
+    FSLH: /
+    GRAVE: "`"
+    GREATER_THAN: ">"
+    GT: ">"
+    HASH: "#"
+    LBKT: "["
+    LBRC: "{"
+    LEFT_BRACE: "{"
+    LEFT_BRACKET: "["
+    LEFT_PARENTHESIS: (
+    LESS_THAN: <
+    LPAR: (
+    LT: <
+    MINUS: "-"
+    NON_US_BACKSLASH: \
+    NON_US_BSLH: "|"
+    NON_US_HASH: "#"
+    NUHS: "#"
+    PERCENT: "%"
+    PERIOD: .
+    PIPE: "|"
+    PIPE2: "|"
+    PLUS: +
+    POUND: "#"
+    PRCNT: "%"
+    QMARK: "?"
+    QUESTION: "?"
+    RBKT: "]"
+    RBRC: "}"
+    RIGHT_BRACE: "}"
+    RIGHT_BRACKET: "]"
+    RIGHT_PARENTHESIS: )
+    RPAR: )
+    SEMI: ;
+    SEMICOLON: ;
+    SINGLE_QUOTE: "'"
+    SLASH: /
+    SQT: "'"
+    STAR: "*"
+    TILDE: "~"
+    TILDE2: "~"
+    UNDER: _
+    UNDERSCORE: _
+
+draw_config:
+  append_colon_to_layer_header: false
+  dark_mode: false
+  footer_text: "Akitsu Echo"
+  glyph_tap_size: 15
+  glyph_hold_size: 12
+  glyph_shifted_size: 10
+  glyph_urls:
+    akitsu_backspace: "file:config/AkitsuEcho/svg/backspace.svg"
+    akitsu_command: "file:config/AkitsuEcho/svg/command.svg"
+    akitsu_control: "file:config/AkitsuEcho/svg/control.svg"
+    akitsu_delete: "file:config/AkitsuEcho/svg/delete.svg"
+    akitsu_escape: "file:config/AkitsuEcho/svg/escape.svg"
+    akitsu_lower: "file:config/AkitsuEcho/svg/lower.svg"
+    akitsu_option: "file:config/AkitsuEcho/svg/option.svg"
+    akitsu_raise: "file:config/AkitsuEcho/svg/raise.svg"
+    akitsu_return: "file:config/AkitsuEcho/svg/return.svg"
+    akitsu_shift: "file:config/AkitsuEcho/svg/shift.svg"
+    akitsu_tab: "file:config/AkitsuEcho/svg/tab.svg"
+  use_local_cache: false
+  legend_rel_y: 1
+  outer_pad_w: 10
+  outer_pad_h: 10
+  small_pad: 4
+
+  svg_style: |
+    svg path { fill: inherit; }
+
+    svg.keymap {
+      fill: #ff8a00;
+      background-color: #6a6a6a;
+      font-family: "Cyber Alert", "Cyber Alert Solid", "Orbitron", "Eurostile", system-ui, sans-serif;
+        font-size: 16px;
+        font-kerning: normal;
+        text-rendering: optimizeLegibility;
+    }
+
+    text {
+        text-anchor: middle;
+        dominant-baseline: middle;
+        letter-spacing: 0.02em;
+    }
+
+    text.tap     { font-weight: 500; }
+    text.hold    { font-weight: 400; font-size: 13px; }
+    text.shifted { font-weight: 400; font-size: 11px; }
+    text.combo, text.left, text.right, text.tl, text.tr, text.bl, text.br { font-size: 10px; }
+
+    text.hold, text.bl, text.br    { text-anchor: middle; dominant-baseline: auto; }
+    text.shifted, text.tl, text.tr { text-anchor: middle; dominant-baseline: hanging; }
+    text.left, text.tl, text.bl    { text-anchor: start; }
+    text.right, text.tr, text.br   { text-anchor: end; }
+
+    text.layer-activator { text-decoration: underline; }
+    text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right { font-size: 8px; }
+
+    text.label, text.footer {
+      fill: #ff8a00;
+        stroke: #000000;
+        stroke-width: 4;
+        paint-order: stroke;
+    }
+    text.label  { font-weight: bold; text-anchor: start; }
+    text.footer { text-anchor: end; dominant-baseline: auto; }
+
+    rect.key, rect.combo, rect.combo-separate { fill: #050505; stroke-width: 0; }
+    rect.held, rect.combo.held                { fill: #151515; }
+    .layer-Combos rect.key                    { fill: #2a2a2a; }
+
+    path.combo { stroke: #6f3a00; stroke-width: 2; stroke-dasharray: 2, 3; opacity: 0.45; fill: none; }
+
+    text.tl, use.tl { fill: #ff9b1a; }
+    text.tr, use.tr { fill: #ff8a00; }
+    text.bl, use.bl { fill: #ff7a00; }
+    text.br, use.br { fill: #ffab40; }
+
+    use.key.tap { fill: #ff8a00; }
+    use.key.hold { fill: #ff9b1a; }
+    use.key.shifted { fill: #ffab40; }
+    use.key.left, use.key.right, use.key.tl, use.key.tr, use.key.bl, use.key.br { fill: #ff8a00; }
+
+    .keypos-30 text.hold { fill: #ff8a00; }
+    .keypos-31 text.hold { fill: #ff9b1a; }
+    .keypos-32 text.hold { fill: #ff7a00; font-size: 15px; }
+    .keypos-33 text.hold { font-size: 15px; }
+
+    .icon-tabler > path                             { fill: inherit; stroke: inherit; stroke-width: 2; }
+    .icon-tabler > path[stroke="none"][fill="none"] { visibility: hidden; }
+
+    @media (prefers-color-scheme: dark) {}
